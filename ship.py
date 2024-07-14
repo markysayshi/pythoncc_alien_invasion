@@ -4,6 +4,11 @@ class Ship:
     """A class to manage the ship."""
 
     def __init__(self, ai_game):
+        # this print call is cool, it tells me what self, ai_game refers to
+        # https://ehmatthes.github.io/pcc_2e/reader_questions/ship_self/
+        print(f"\nself in Ship: {self}")
+        print(f"ai_game in Ship: {ai_game}")
+
         """Initialize the ship and set its starting position."""
         self.screen = ai_game.screen
         self.screen_rect = ai_game.screen.get_rect()

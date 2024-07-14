@@ -5,6 +5,7 @@ import pygame
 
 from settings import Settings
 from ship import Ship
+import inspect
 
 class AlienInvasion:
     """Overall class to manage game assets and behavior."""
@@ -19,6 +20,11 @@ class AlienInvasion:
         pygame.display.set_caption("Alien Invasion")
 
         self.ship = Ship(self)
+
+        # this print call is cool, it tells me what self refers to
+        # https://ehmatthes.github.io/pcc_2e/reader_questions/ship_self/
+        print(f"\nself in AlienInvasion: {self}")
+        #print(self, type(self))
 
     def run_game(self):
         """Start the main loop for the game."""
@@ -44,3 +50,5 @@ if __name__ == '__main__':
     # Make a game instance, and run the game.
     ai = AlienInvasion()
     ai.run_game()
+
+#print(inspect.getsource(init))
