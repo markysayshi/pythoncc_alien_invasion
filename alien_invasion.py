@@ -30,10 +30,13 @@ class AlienInvasion:
 
         self.ship = Ship(self)
         self.bullets = pygame.sprite.Group()
+        # trying to understand how bullets.update() calls bullet.update()
+        #print(self.bullets)
+        #print(self.bullets.update())
 
         # this print call is cool, it tells me what self refers to
         # https://ehmatthes.github.io/pcc_2e/reader_questions/ship_self/
-        print(f"\nself in AlienInvasion: {self}")
+        #print(f"\nself in AlienInvasion: {self}")
         #print(self, type(self))
 
     def run_game(self):
@@ -57,21 +60,36 @@ class AlienInvasion:
 
     def _check_keydown_events(self, event):
         """Respond to keypresses."""
-        if event.key == pygame.K_RIGHT:
-            self.ship.moving_right = True
-        elif event.key == pygame.K_LEFT:
-            self.ship.moving_left = True
+        #if event.key == pygame.K_RIGHT:
+        #    self.ship.moving_right = True
+        #elif event.key == pygame.K_LEFT:
+        #    self.ship.moving_left = True
+
+        ## tiy 253
+        ## change to elif if re-enable right left
+        if event.key == pygame.K_UP:
+            self.ship.moving_up = True
+        elif event.key == pygame.K_DOWN:
+            self.ship.moving_down = True
+
         elif event.key == pygame.K_q:
             sys.exit()
         elif event.key == pygame.K_SPACE:
             self._fire_bullet()
 
     def _check_keyup_events(self, event):
-        """Respond to keypresses."""
-        if event.key == pygame.K_RIGHT:
-            self.ship.moving_right = False
-        elif event.key == pygame.K_LEFT:
-            self.ship.moving_left = False
+        """Respond to keyreleases."""
+        #if event.key == pygame.K_RIGHT:
+        #    self.ship.moving_right = False
+        #elif event.key == pygame.K_LEFT:
+        #    self.ship.moving_left = False
+
+        ## tiy 253
+        ## change to elif if re-enable right left
+        if event.key == pygame.K_UP:
+            self.ship.moving_up = False
+        elif event.key == pygame.K_DOWN:
+            self.ship.moving_down = False
 
     def _fire_bullet(self):
         """Create a new bullet and add it to the bullets group."""
@@ -86,11 +104,14 @@ class AlienInvasion:
 
         # Get rid of bullets that have disappeared.
         for bullet in self.bullets.copy():
-            if bullet.rect.bottom <= 0:
+            #if bullet.rect.bottom <= 0:
+            ## tiy 253, comment only 1 line below to restore
+            if bullet.rect.left >= self.settings.screen_width:
                 self.bullets.remove(bullet)
         # Shows bullets being deleted as they move off screen.
         # Keep uncommented to save memory, page 251.
         #print(len(self.bullets))
+        #print(self.bullets)
 
     def _update_screen(self):
         """Update images on the screen, and flip to the new screen."""
@@ -107,3 +128,13 @@ if __name__ == '__main__':
     ai.run_game()
 
 #print(inspect.getsource(init))
+#print(inspect.getsource(pygame.sprite.Group))
+#print(inspect.getsource(pygame.sprite.Group.update))
+#print(inspect.getsource(pygame.sprite.Sprite))
+
+## as to what is happening on page 249
+## the class Bullet is inheriting from Sprite
+## Sprite has a builtin method called update(), that does nothing
+## that you are expected to overwrite with your own update() method
+## from the child class you create
+## reread classes in book, mainly the parent/child inheritence part

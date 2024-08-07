@@ -1,33 +1,35 @@
-###### taking apart alien invasion to better understand it
+## taking apart alien invasion to better understand it
 import sys
 import pygame
+from pygame.sprite import Sprite
+
 import inspect
 
+## settings
 screen_width = 1200
 screen_height = 800
 bg_color = (230, 230, 230)
 #bg_color = (117, 14, 98)
 
+## pygame init
 pygame.init()
 clock = pygame.time.Clock()
 screen = pygame.display.set_mode((screen_width, screen_height))
-###### FULLSCREEN, don't like this, but testing it out
+## FULLSCREEN, don't like this, but testing it out
 #screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
 #screen_width = screen.get_rect().width
 #screen_height = screen.get_rect().height
-######
 pygame.display.set_caption("testing")
 
-#image = pygame.image.load('images/ship.bmp')
-###### for try it yourself, page 246
-image = pygame.image.load('images/rocketship.bmp')
+image = pygame.image.load('images/ship.bmp')
+## for try it yourself, page 246
+#image = pygame.image.load('images/rocketship.bmp')
 #image = pygame.image.load('images/jackhead.bmp')
 
 ## this gets the rect of the image's surface
 ## and sets it to the variable rect
 rect = image.get_rect()
 
-######
 ## print calls to underwhat what is going on with rect positions
 print(rect)
 
@@ -37,15 +39,13 @@ screen_rect = screen.get_rect()
 
 ## this sets the image rect position, midbottom
 ## to the screens rect position, midbottom
-###### made this center for jackhead
-rect.center = screen_rect.center
-###### This is the original
-#rect.midbottom = screen_rect.midbottom
-######
+## made this center for jackhead
+#rect.center = screen_rect.center
+## This is the original
+rect.midbottom = screen_rect.midbottom
 ## an example of putting the image in the screen's center
 #rect.midbottom = screen_rect.center
 
-######
 ## print calls to understand what is going on with rect positions
 ## https://www.pygame.org/docs/ref/rect.html
 #print(image.get_rect())
@@ -53,9 +53,10 @@ print(rect)
 #print(rect.midbottom)
 #print(screen_rect.midbottom)
 
+## movement flags, start as False
 moving_right = False
 moving_left = False
-###### for try it yourself, page 246
+## for try it yourself, page 246
 moving_up = False
 moving_down = False
 ## this works, if I wanted a function
@@ -67,10 +68,10 @@ moving_down = False
 ship_speed = 4.5
 ## converting from int to float
 x = float(rect.x)
-###### for try it yourself, page 246
+## for try it yourself, page 246
 y = float(rect.y)
 
-###### testing function, doesn't work, will mess with it later
+###### function, doesn't work, will mess with it later
 #def check_keydown_events(event):
 #    """Respond to key presses."""
 #    if event.key == pygame.K_RIGHT:
@@ -86,26 +87,40 @@ y = float(rect.y)
 #        moving_left = False
 ######
 
+## bullet settings
+bullet_speed = 2.0
+bullet_width = 3
+bullet_height = 15
+bullet_color = (60, 60, 60)
+
+## bullet rect
+bullet_rect = pygame.Rect(0, 0, bullet_width, bullet_height)
+## bullet rect position
+bullet_rect.midtop = rect.midtop
+
+## bullet's y position as float
+bullet_y = float(bullet_rect.y)
+
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             sys.exit()
 
         elif event.type == pygame.KEYDOWN:
-            ###### check what keys are pressed with print
+            ## check what keys are pressed with print
             ## shows the name of the key pressed
             #print(pygame.key.name(event.key))
             ## shows only the key pressed unicode
             #print(event.key)
             ## shows everything about the event
             print(event)
-            ######
+            ###### function, doesn't work, will mess with it later
             #check_keydown_events(event)
             if event.key == pygame.K_RIGHT:
                 moving_right = True
             elif event.key == pygame.K_LEFT:
                 moving_left = True
-            ###### for try it yourself, page 246
+            ## for try it yourself, page 246
             elif event.key == pygame.K_UP:
                 moving_up = True
             elif event.key == pygame.K_DOWN:
@@ -113,6 +128,8 @@ while True:
             # exit game if q is pressed
             elif event.key == pygame.K_q:
                 sys.exit()
+            elif event.key == pygame.K_SPACE:
+                pass
 
         elif event.type == pygame.KEYUP:
             #check_keyup_events(event)
@@ -120,7 +137,7 @@ while True:
                 moving_right = False
             elif event.key == pygame.K_LEFT:
                 moving_left = False
-            ###### for try it yourself, page 246
+            ## for try it yourself, page 246
             elif event.key == pygame.K_UP:
                 moving_up = False
             elif event.key == pygame.K_DOWN:
@@ -144,7 +161,15 @@ while True:
     rect.x = x
     rect.y = y
 
+    ## bullet position
+    bullet_y -= bullet_speed
+    ## update bullet rect position
+    bullet_rect.y = bullet_y
+
     screen.fill((bg_color))
+
+    pygame.draw.rect(screen, bullet_color, bullet_rect)
+
     screen.blit(image, rect)
     pygame.display.flip()
     clock.tick(60)
