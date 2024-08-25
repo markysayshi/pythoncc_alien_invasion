@@ -6,6 +6,7 @@ import pygame
 from settings import Settings
 from ship import Ship
 from bullet import Bullet
+from alien import Alien
 
 class AlienInvasion:
     """Overall class to manage game assets and behavior."""
@@ -27,6 +28,9 @@ class AlienInvasion:
 
         self.ship = Ship(self)
         self.bullets = pygame.sprite.Group()
+        self.aliens = pygame.sprite.Group()
+
+        self._create_fleet()
 
     def run_game(self):
         """Start the main loop for the game."""
@@ -84,12 +88,52 @@ class AlienInvasion:
         # Keep uncommented to save memory, page 251.
         #print(len(self.bullets))
 
+    def _create_fleet(self):
+        """Create the fleet of aliens."""
+        # Create an alien and keep adding aliens until there's no room left.
+        # Spacing between aliens is one alien width and one alien height.
+        alien = Alien(self)
+        #print(alien.rect.size)
+        alien_width, alien_height = alien.rect.size
+
+        current_x, current_y = alien_width, alien_height
+        #print(current_x)
+        #print(current_y)
+        while current_y < (self.settings.screen_height - 3 * alien_height):
+            while current_x < (self.settings.screen_width - 2 * alien_width):
+                #print(current_x)
+                self._create_alien(current_x, current_y)
+                current_x += 2 * alien_width
+
+            # Finished a row; reset x value, and increment y value.
+            #print(current_y)
+            current_x = alien_width
+            current_y += 2 * alien_height
+
+    def _create_alien(self, x_position, y_position):
+        """Create an alien and place it in the fleet."""
+        new_alien = Alien(self)
+        ## wtf does this do, if I comment it out, still works
+        ## new_alien.x, it has the same values as new_alien.rect.x
+        ## looks like something for the future possibly
+        ## used print calls to debug
+        #print(new_alien.x)
+        new_alien.x = x_position
+        #print(new_alien.x)
+        #print(new_alien.rect.x)
+        new_alien.rect.x = x_position
+        new_alien.rect.y = y_position
+        #print(new_alien.rect.x)
+        self.aliens.add(new_alien)
+        #print(self.aliens)
+
     def _update_screen(self):
         """Update images on the screen, and flip to the new screen."""
         self.screen.fill(self.settings.bg_color)
         for bullet in self.bullets.sprites():
             bullet.draw_bullet()
         self.ship.blitme()
+        self.aliens.draw(self.screen)
 
         pygame.display.flip()
 
@@ -97,3 +141,5 @@ if __name__ == '__main__':
     # Make a game instance, and run the game.
     ai = AlienInvasion()
     ai.run_game()
+    #print(ai.bullets)
+    #print(ai.aliens)
