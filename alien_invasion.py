@@ -6,6 +6,7 @@ import pygame
 from settings import Settings
 from ship import Ship
 from bullet import Bullet
+from alien import Alien
 
 # for playing with inspect
 import inspect
@@ -38,6 +39,9 @@ class AlienInvasion:
         # https://ehmatthes.github.io/pcc_2e/reader_questions/ship_self/
         #print(f"\nself in AlienInvasion: {self}")
         #print(self, type(self))
+        self.aliens = pygame.sprite.Group()
+
+        self._create_fleet()
 
     def run_game(self):
         """Start the main loop for the game."""
@@ -60,17 +64,17 @@ class AlienInvasion:
 
     def _check_keydown_events(self, event):
         """Respond to keypresses."""
-        #if event.key == pygame.K_RIGHT:
-        #    self.ship.moving_right = True
-        #elif event.key == pygame.K_LEFT:
-        #    self.ship.moving_left = True
+        if event.key == pygame.K_RIGHT:
+            self.ship.moving_right = True
+        elif event.key == pygame.K_LEFT:
+            self.ship.moving_left = True
 
         ## tiy 253
         ## change to elif if re-enable right left
-        if event.key == pygame.K_UP:
-            self.ship.moving_up = True
-        elif event.key == pygame.K_DOWN:
-            self.ship.moving_down = True
+        #if event.key == pygame.K_UP:
+        #    self.ship.moving_up = True
+        #elif event.key == pygame.K_DOWN:
+        #    self.ship.moving_down = True
 
         elif event.key == pygame.K_q:
             sys.exit()
@@ -79,17 +83,17 @@ class AlienInvasion:
 
     def _check_keyup_events(self, event):
         """Respond to keyreleases."""
-        #if event.key == pygame.K_RIGHT:
-        #    self.ship.moving_right = False
-        #elif event.key == pygame.K_LEFT:
-        #    self.ship.moving_left = False
+        if event.key == pygame.K_RIGHT:
+            self.ship.moving_right = False
+        elif event.key == pygame.K_LEFT:
+            self.ship.moving_left = False
 
         ## tiy 253
         ## change to elif if re-enable right left
-        if event.key == pygame.K_UP:
-            self.ship.moving_up = False
-        elif event.key == pygame.K_DOWN:
-            self.ship.moving_down = False
+        #if event.key == pygame.K_UP:
+        #    self.ship.moving_up = False
+        #elif event.key == pygame.K_DOWN:
+        #    self.ship.moving_down = False
 
     def _fire_bullet(self):
         """Create a new bullet and add it to the bullets group."""
@@ -104,14 +108,53 @@ class AlienInvasion:
 
         # Get rid of bullets that have disappeared.
         for bullet in self.bullets.copy():
-            #if bullet.rect.bottom <= 0:
+            if bullet.rect.bottom <= 0:
             ## tiy 253, comment only 1 line below to restore
-            if bullet.rect.left >= self.settings.screen_width:
+            #if bullet.rect.left >= self.settings.screen_width:
                 self.bullets.remove(bullet)
         # Shows bullets being deleted as they move off screen.
         # Keep uncommented to save memory, page 251.
-        #print(len(self.bullets))
+        print(len(self.bullets))
         #print(self.bullets)
+
+    def _create_fleet(self):
+        """Create the fleet of aliens."""
+        # Create an alien and keep adding aliens until there's no room left.
+        # Spacing between aliens is one alien width and one alien height.
+        alien = Alien(self)
+        #print(alien.rect.size)
+        alien_width, alien_height = alien.rect.size
+
+        current_x, current_y = alien_width, alien_height
+        #print(current_x)
+        #print(current_y)
+        while current_y < (self.settings.screen_height - 3 * alien_height):
+            while current_x < (self.settings.screen_width - 2 * alien_width):
+                #print(current_x)
+                self._create_alien(current_x, current_y)
+                current_x += 2 * alien_width
+
+            # Finished a row; reset x value, and increment y value.
+            #print(current_y)
+            current_x = alien_width
+            current_y += 2 * alien_height
+
+    def _create_alien(self, x_position, y_position):
+        """Create an alien and place it in the fleet."""
+        new_alien = Alien(self)
+        ## wtf does this do, if I comment it out, still works
+        ## new_alien.x, it has the same values as new_alien.rect.x
+        ## looks like something for the future possibly
+        ## used print calls to debug
+        #print(new_alien.x)
+        new_alien.x = x_position
+        #print(new_alien.x)
+        #print(new_alien.rect.x)
+        new_alien.rect.x = x_position
+        new_alien.rect.y = y_position
+        #print(new_alien.rect.x)
+        self.aliens.add(new_alien)
+        #print(self.aliens)
 
     def _update_screen(self):
         """Update images on the screen, and flip to the new screen."""
@@ -119,6 +162,7 @@ class AlienInvasion:
         for bullet in self.bullets.sprites():
             bullet.draw_bullet()
         self.ship.blitme()
+        self.aliens.draw(self.screen)
 
         pygame.display.flip()
 
@@ -138,3 +182,5 @@ if __name__ == '__main__':
 ## that you are expected to overwrite with your own update() method
 ## from the child class you create
 ## reread classes in book, mainly the parent/child inheritence part
+    #print(ai.bullets)
+    #print(ai.aliens)
