@@ -10,9 +10,9 @@ class Alien(Sprite):
         self.screen = ai_game.screen
 
         # Load the alien image and set its rect attribute.
-        #self.image = pygame.image.load('images/alien.bmp')
-        # tiy 263
-        self.image = pygame.image.load('images/star.bmp')
+        self.image = pygame.image.load('images/alien.bmp')
+        ## tiy 263
+        #self.image = pygame.image.load('images/star.bmp')
         self.rect = self.image.get_rect()
         # the rect starts at 0, 0
         #print(self.rect.x)

@@ -124,36 +124,36 @@ class AlienInvasion:
         # Spacing between aliens is one alien width and one alien height.
         alien = Alien(self)
         #print(alien.rect.size)
-        #alien_width, alien_height = alien.rect.size
-        #current_x, current_y = alien_width, alien_height
+        alien_width, alien_height = alien.rect.size
+        current_x, current_y = alien_width, alien_height
 
         ##current_x, current_y = (0, 0)
         ##print(current_x)
         ##print(current_y)
-        #while current_y < (self.settings.screen_height - 3 * alien_height):
-        #    while current_x < (self.settings.screen_width - 2 * alien_width):
-        #        #print(current_x)
-        #        self._create_alien(current_x, current_y)
-        #        current_x += 2 * alien_width
-
-        #    # Finished a row; reset x value, and increment y value.
-        #    #print(current_y)
-        #    current_x = alien_width
-        #    current_y += 2 * alien_height
-
-        # tiy 263
-        alien_width, alien_height = alien.rect.size
-        #current_x, current_y = alien_width, alien_height
-        current_x, current_y = (randint(0, 50), 2)
-
-        while current_y < (self.settings.screen_height - alien_height):
+        while current_y < (self.settings.screen_height - 3 * alien_height):
             while current_x < (self.settings.screen_width - 2 * alien_width):
+                #print(current_x)
                 self._create_alien(current_x, current_y)
-                current_x += randint(50, 200)
+                current_x += 2 * alien_width
 
             # Finished a row; reset x value, and increment y value.
-            current_x = randint(0, 200)
-            current_y += randint(0, 100)
+            #print(current_y)
+            current_x = alien_width
+            current_y += 2 * alien_height
+
+        ## tiy 263
+        #alien_width, alien_height = alien.rect.size
+        ##current_x, current_y = alien_width, alien_height
+        #current_x, current_y = (randint(0, 50), 2)
+
+        #while current_y < (self.settings.screen_height - alien_height):
+        #    while current_x < (self.settings.screen_width - 2 * alien_width):
+        #        self._create_alien(current_x, current_y)
+        #        current_x += randint(50, 200)
+
+        #    # Finished a row; reset x value, and increment y value.
+        #    current_x = randint(0, 200)
+        #    current_y += randint(0, 100)
 
     def _create_alien(self, x_position, y_position):
         """Create an alien and place it in the fleet."""
@@ -170,7 +170,8 @@ class AlienInvasion:
         new_alien.rect.y = y_position
         #print(new_alien.rect.x)
         self.aliens.add(new_alien)
-        print(self.aliens)
+        # prints the number of aliens in the group as they are added
+        #print(self.aliens)
 
     def _update_screen(self):
         """Update images on the screen, and flip to the new screen."""
