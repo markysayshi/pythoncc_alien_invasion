@@ -51,6 +51,9 @@ class AlienInvasion:
             self.ship.update()
             self._update_bullets()
             self._update_aliens()
+            self._delete_aliens()
+            # tiy 266 testing
+            self._continue_rain()
             self._update_screen()
             self.clock.tick(60)
 
@@ -131,12 +134,15 @@ class AlienInvasion:
         alien = Alien(self)
         #print(alien.rect.size)
         alien_width, alien_height = alien.rect.size
+        #print(alien_width)
+        #print(alien_height)
         current_x, current_y = alien_width, alien_height
 
         ##current_x, current_y = (0, 0)
         ##print(current_x)
         ##print(current_y)
-        while current_y < (self.settings.screen_height - 3 * alien_height):
+        # tiy 266, code to alter is here I think
+        while current_y < (self.settings.screen_height - 1 * alien_height):
             while current_x < (self.settings.screen_width - 2 * alien_width):
                 #print(current_x)
                 self._create_alien(current_x, current_y)
@@ -170,6 +176,12 @@ class AlienInvasion:
         ## used print calls to debug
         #print(new_alien.x)
         new_alien.x = x_position
+
+        # tiy 266, not sure if this will help
+        # this actually worked, why
+        # something to do with _create_fleet
+        new_alien.y = y_position
+
         #print(new_alien.x)
         #print(new_alien.rect.x)
         new_alien.rect.x = x_position
@@ -178,6 +190,49 @@ class AlienInvasion:
         self.aliens.add(new_alien)
         # prints the number of aliens in the group as they are added
         #print(self.aliens)
+        #print(len(self.aliens))
+        #print(self.aliens.sprites)
+        # this is interesting, search by 'Group' to see
+        # that bullets and aliens are just being assigned to a 'Group'
+        # look this up in help/dir
+        #pygame.sprite.Group.sprites
+
+    # tiy 266
+    # this is a modified _update_bullets method
+    # it deletes raindrops when they hit bottom of the screen
+    def _delete_aliens(self):
+        """Update position of bullets and get rid of old bullets."""
+        # Update bullet positions.
+        self.aliens.update()
+
+        # Get rid of bullets that have disappeared.
+        for alien in self.aliens.copy():
+            if alien.rect.top >= 800:
+            ## tiy 253, comment only 1 line below to restore
+            #if bullet.rect.left >= self.settings.screen_width:
+                self.aliens.remove(alien)
+        # Shows bullets being deleted as they move off screen.
+        # Keep uncommented to save memory, page 251.
+        print(len(self.aliens))
+        #print(alien.rect.top)
+
+    # tiy 266 testing
+    def _continue_rain(self):
+        alien = Alien(self)
+        #print(alien.rect.size)
+        alien_width, alien_height = alien.rect.size
+        #print(alien_width)
+        #print(alien_height)
+        current_x, current_y = alien_width, alien_height
+
+        if (len(self.aliens)) <= 558:
+        #if (len(self.aliens)) <= 0:
+        #    self._create_fleet()
+
+            while current_x < (self.settings.screen_width - 2 * alien_width):
+                #print(current_x)
+                self._create_alien(current_x, current_y)
+                current_x += 2 * alien_width
 
     def _check_fleet_edges(self):
         """Respond appropriately if any aliens have reached an edge."""
@@ -201,6 +256,11 @@ class AlienInvasion:
         self.aliens.draw(self.screen)
 
         pygame.display.flip()
+
+# I think this returns __main__ because it's being called
+# from the main file, if it was called from another file, it might
+# return the actual name of this file.
+#print(__name__)
 
 if __name__ == '__main__':
     # Make a game instance, and run the game.
