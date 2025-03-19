@@ -15,10 +15,19 @@ class Person:
 #x.printname()
 
 class Student(Person):
+    def __init__(self, fname, lname, year):
+        super().__init__(fname, lname)
+        self.graduationyear = year
+
     # use pass when you don't want any other properties or methods
-    pass
+    #pass
+
+    def welcome(self):
+        print("Welcome", self.firstname, self.lastname, "to the class of",
+              self.graduationyear)
 
 # Use the student 'child' class to create an object,
 # and then execute the printname method.
-x = Student("Mike", "Olsen")
+x = Student("Mike", "Olsen", 2019)
 x.printname()
+x.welcome()
