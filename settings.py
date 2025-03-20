@@ -14,8 +14,10 @@ class Settings:
         self.ship_speed = 6.5
 
         #Bullet settings
-        self.bullet_speed = 2.0
+        self.bullet_speed = 2.5
         self.bullet_width = 3
+        # increased bullet size, for testing
+        #self.bullet_width = 300
         self.bullet_height = 15
 
         ## tiy 253
