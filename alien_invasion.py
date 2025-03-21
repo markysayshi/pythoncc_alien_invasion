@@ -51,9 +51,9 @@ class AlienInvasion:
             self.ship.update()
             self._update_bullets()
             self._update_aliens()
-            self._delete_aliens()
-            # tiy 266 testing
-            self._continue_rain()
+            ## tiy 266
+            #self._delete_rain()
+            #self._continue_rain()
             self._update_screen()
             self.clock.tick(60)
 
@@ -141,6 +141,7 @@ class AlienInvasion:
         self._check_fleet_edges()
         self.aliens.update()
 
+    # tiy 270
     def _create_fleet(self):
         """Create the fleet of aliens."""
         # Create an alien and keep adding aliens until there's no room left.
@@ -150,36 +151,61 @@ class AlienInvasion:
         alien_width, alien_height = alien.rect.size
         #print(alien_width)
         #print(alien_height)
-        current_x, current_y = alien_width, alien_height
 
-        ##current_x, current_y = (0, 0)
-        ##print(current_x)
-        ##print(current_y)
-        # tiy 266, code to alter is here I think
-        while current_y < (self.settings.screen_height - 1 * alien_height):
-            while current_x < (self.settings.screen_width - 2 * alien_width):
-                #print(current_x)
+        current_x, current_y = 1080, alien_height
+
+        #print(current_x)
+        #print(current_y)
+        while current_x > (2 * alien_width):
+            while current_y < (self.settings.screen_height - 1 * alien_height):
                 self._create_alien(current_x, current_y)
-                current_x += 2 * alien_width
+                current_y += 2 * alien_height
+                #print(current_y)
+                #print(current_x)
 
-            # Finished a row; reset x value, and increment y value.
+            current_y = alien_height
+            current_x -= 2 * alien_width
             #print(current_y)
-            current_x = alien_width
-            current_y += 2 * alien_height
+            #print(current_x)
 
-        ## tiy 263
-        #alien_width, alien_height = alien.rect.size
-        ##current_x, current_y = alien_width, alien_height
-        #current_x, current_y = (randint(0, 50), 2)
+    #def _create_fleet(self):
+    #    """Create the fleet of aliens."""
+    #    # Create an alien and keep adding aliens until there's no room left.
+    #    # Spacing between aliens is one alien width and one alien height.
+    #    alien = Alien(self)
+    #    #print(alien.rect.size)
+    #    alien_width, alien_height = alien.rect.size
+    #    #print(alien_width)
+    #    #print(alien_height)
+    #    current_x, current_y = alien_width, alien_height
 
-        #while current_y < (self.settings.screen_height - alien_height):
-        #    while current_x < (self.settings.screen_width - 2 * alien_width):
-        #        self._create_alien(current_x, current_y)
-        #        current_x += randint(50, 200)
+    #    ##current_x, current_y = (0, 0)
+    #    ##print(current_x)
+    #    ##print(current_y)
+    #    while current_y < (self.settings.screen_height - 1 * alien_height):
+    #        while current_x < (self.settings.screen_width - 2 * alien_width):
+    #            #print(current_x)
+    #            self._create_alien(current_x, current_y)
+    #            current_x += 2 * alien_width
 
-        #    # Finished a row; reset x value, and increment y value.
-        #    current_x = randint(0, 200)
-        #    current_y += randint(0, 100)
+    #        # Finished a row; reset x value, and increment y value.
+    #        #print(current_y)
+    #        current_x = alien_width
+    #        current_y += 2 * alien_height
+
+    #    ## tiy 263
+    #    #alien_width, alien_height = alien.rect.size
+    #    ##current_x, current_y = alien_width, alien_height
+    #    #current_x, current_y = (randint(0, 50), 2)
+
+    #    #while current_y < (self.settings.screen_height - alien_height):
+    #    #    while current_x < (self.settings.screen_width - 2 * alien_width):
+    #    #        self._create_alien(current_x, current_y)
+    #    #        current_x += randint(50, 200)
+
+    #    #    # Finished a row; reset x value, and increment y value.
+    #    #    current_x = randint(0, 200)
+    #    #    current_y += randint(0, 100)
 
     def _create_alien(self, x_position, y_position):
         """Create an alien and place it in the fleet."""
@@ -191,9 +217,10 @@ class AlienInvasion:
         #print(new_alien.x)
         new_alien.x = x_position
 
-        # tiy 266, not sure if this will help
-        # this actually worked, why
+        # tiy 266
+        # this fixed an issue with raindrops being created, not sure how exactly
         # something to do with _create_fleet
+        # going to leave it enabled for now
         new_alien.y = y_position
 
         #print(new_alien.x)
@@ -211,42 +238,42 @@ class AlienInvasion:
         # look this up in help/dir
         #pygame.sprite.Group.sprites
 
-    # tiy 266
-    # this is a modified _update_bullets method
-    # it deletes raindrops when they hit bottom of the screen
-    def _delete_aliens(self):
-        """Update position of bullets and get rid of old bullets."""
-        # Update bullet positions.
-        self.aliens.update()
+    ## tiy 266
+    ## this is a modified _update_bullets method
+    ## it deletes raindrops when they hit bottom of the screen
+    #def _delete_rain(self):
+    #    """Update position of bullets and get rid of old bullets."""
+    #    # Update bullet positions.
+    #    self.aliens.update()
 
-        # Get rid of bullets that have disappeared.
-        for alien in self.aliens.copy():
-            if alien.rect.top >= 800:
-            ## tiy 253, comment only 1 line below to restore
-            #if bullet.rect.left >= self.settings.screen_width:
-                self.aliens.remove(alien)
-        # Shows bullets being deleted as they move off screen.
-        # Keep uncommented to save memory, page 251.
-        print(len(self.aliens))
-        #print(alien.rect.top)
+    #    # Get rid of bullets that have disappeared.
+    #    for alien in self.aliens.copy():
+    #        if alien.rect.top >= 800:
+    #        ## tiy 253, comment only 1 line below to restore
+    #        #if bullet.rect.left >= self.settings.screen_width:
+    #            self.aliens.remove(alien)
+    #    # Shows bullets being deleted as they move off screen.
+    #    # Keep uncommented to save memory, page 251.
+    #    print(len(self.aliens))
+    #    #print(alien.rect.top)
 
-    # tiy 266 testing
-    def _continue_rain(self):
-        alien = Alien(self)
-        #print(alien.rect.size)
-        alien_width, alien_height = alien.rect.size
-        #print(alien_width)
-        #print(alien_height)
-        current_x, current_y = alien_width, alien_height
+    ## tiy 266
+    #def _continue_rain(self):
+    #    alien = Alien(self)
+    #    #print(alien.rect.size)
+    #    alien_width, alien_height = alien.rect.size
+    #    #print(alien_width)
+    #    #print(alien_height)
+    #    current_x, current_y = alien_width, alien_height
 
-        if (len(self.aliens)) <= 558:
-        #if (len(self.aliens)) <= 0:
-        #    self._create_fleet()
+    #    if (len(self.aliens)) <= 558:
+    #    #if (len(self.aliens)) <= 0:
+    #    #    self._create_fleet()
 
-            while current_x < (self.settings.screen_width - 2 * alien_width):
-                #print(current_x)
-                self._create_alien(current_x, current_y)
-                current_x += 2 * alien_width
+    #        while current_x < (self.settings.screen_width - 2 * alien_width):
+    #            #print(current_x)
+    #            self._create_alien(current_x, current_y)
+    #            current_x += 2 * alien_width
 
     def _check_fleet_edges(self):
         """Respond appropriately if any aliens have reached an edge."""
@@ -258,7 +285,13 @@ class AlienInvasion:
     def _change_fleet_direction(self):
         """Drop the entire fleet and change the fleet's direction."""
         for alien in self.aliens.sprites():
-            alien.rect.y += self.settings.fleet_drop_speed
+            #alien.rect.y += self.settings.fleet_drop_speed
+
+            # tiy 270
+            #print(alien.rect.x)
+            alien.rect.x -= self.settings.fleet_drop_speed
+            print(alien.rect.x)
+
         self.settings.fleet_direction *= -1
 
     def _update_screen(self):

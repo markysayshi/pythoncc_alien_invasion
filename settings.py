@@ -11,7 +11,7 @@ class Settings:
         #self.bg_color = (0, 0, 0)
 
         # Ship settings
-        self.ship_speed = 6.5
+        self.ship_speed = 1.5
 
         #Bullet settings
         self.bullet_speed = 2.5
@@ -30,8 +30,9 @@ class Settings:
         # Alien settings
         self.alien_speed = 1.0
         self.fleet_drop_speed = 10
+
         # fleet_direction of 1 represents right; -1 represents left.
         self.fleet_direction = 1
 
-        # tiy 266
-        self.rain_speed = 1.0
+        ## tiy 266
+        #self.rain_speed = 1.0
