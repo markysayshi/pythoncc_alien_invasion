@@ -69,17 +69,17 @@ class AlienInvasion:
 
     def _check_keydown_events(self, event):
         """Respond to keypresses."""
-        if event.key == pygame.K_RIGHT:
-            self.ship.moving_right = True
-        elif event.key == pygame.K_LEFT:
-            self.ship.moving_left = True
+        #if event.key == pygame.K_RIGHT:
+        #    self.ship.moving_right = True
+        #elif event.key == pygame.K_LEFT:
+        #    self.ship.moving_left = True
 
-        ## tiy 253
-        ## change to elif if re-enable right left
-        #if event.key == pygame.K_UP:
-        #    self.ship.moving_up = True
-        #elif event.key == pygame.K_DOWN:
-        #    self.ship.moving_down = True
+        # tiy 253, tiy 270
+        # change to elif if re-enable right left
+        if event.key == pygame.K_UP:
+            self.ship.moving_up = True
+        elif event.key == pygame.K_DOWN:
+            self.ship.moving_down = True
 
         elif event.key == pygame.K_q:
             sys.exit()
@@ -88,17 +88,17 @@ class AlienInvasion:
 
     def _check_keyup_events(self, event):
         """Respond to keyreleases."""
-        if event.key == pygame.K_RIGHT:
-            self.ship.moving_right = False
-        elif event.key == pygame.K_LEFT:
-            self.ship.moving_left = False
+        #if event.key == pygame.K_RIGHT:
+        #    self.ship.moving_right = False
+        #elif event.key == pygame.K_LEFT:
+        #    self.ship.moving_left = False
 
-        ## tiy 253
-        ## change to elif if re-enable right left
-        #if event.key == pygame.K_UP:
-        #    self.ship.moving_up = False
-        #elif event.key == pygame.K_DOWN:
-        #    self.ship.moving_down = False
+        # tiy 253, tiy 270
+        # change to elif if re-enable right left
+        if event.key == pygame.K_UP:
+            self.ship.moving_up = False
+        elif event.key == pygame.K_DOWN:
+            self.ship.moving_down = False
 
     def _fire_bullet(self):
         """Create a new bullet and add it to the bullets group."""
@@ -113,13 +113,13 @@ class AlienInvasion:
 
         # Get rid of bullets that have disappeared.
         for bullet in self.bullets.copy():
-            if bullet.rect.bottom <= 0:
-            ## tiy 253, comment only 1 line below to restore
-            #if bullet.rect.left >= self.settings.screen_width:
+            #if bullet.rect.bottom <= 0:
+            # tiy 253,tiy 270 uncomment only 1 line below to restore
+            if bullet.rect.left >= self.settings.screen_width:
                 self.bullets.remove(bullet)
         # Shows bullets being deleted as they move off screen.
         # Keep uncommented to save memory, page 251.
-        #print(len(self.bullets))
+        print(len(self.bullets))
         #print(self.bullets)
 
         self._check_bullet_alien_collisions()
@@ -140,6 +140,8 @@ class AlienInvasion:
         """Check if the fleet is at an edge, then update positions."""
         self._check_fleet_edges()
         self.aliens.update()
+        # print number of aliens on screen
+        print(len(self.aliens))
 
     # tiy 270
     def _create_fleet(self):
@@ -290,7 +292,7 @@ class AlienInvasion:
             # tiy 270
             #print(alien.rect.x)
             alien.rect.x -= self.settings.fleet_drop_speed
-            print(alien.rect.x)
+            #print(alien.rect.x)
 
         self.settings.fleet_direction *= -1
 
