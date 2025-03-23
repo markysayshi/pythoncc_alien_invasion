@@ -20,7 +20,7 @@ class Ship:
 
         # Start each new ship at the bottom center of the screen.
         #self.rect.midbottom = self.screen_rect.midbottom
-        ## tiy 253, tiy 270
+        ## tiy 253, tiy 270, tiy 275
         self.rect.midleft = self.screen_rect.midleft 
 
         ## Store a float for the ship's exact horizontal position.
@@ -56,5 +56,13 @@ class Ship:
     def blitme(self):
         """Draw the ship at its current location."""
         self.screen.blit(self.image, self.rect)
+
+    def center_ship(self):
+        """Center the ship on the screen."""
+        #self.rect.midbottom = self.screen_rect.midbottom
+        #self.x = float(self.rect.x)
+        # 275
+        self.rect.midleft = self.screen_rect.midleft
+        self.y = float(self.rect.y)
 
 #print(__name__)
