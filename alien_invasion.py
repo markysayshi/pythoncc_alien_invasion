@@ -60,9 +60,9 @@ class AlienInvasion:
 
         # tiy 283
         # Make the rectangle for target practice.
-        self.target = pygame.sprite.Group()
         self.target_practice = Rectangle(self)
-        #print(len(self.target))
+        self.target = pygame.sprite.Group()
+        self.target.add(self.target_practice)
 
     def run_game(self):
         """Start the main loop for the game."""
@@ -71,15 +71,13 @@ class AlienInvasion:
 
             if self.game_active:
                 self.ship.update()
-                self._update_target()
+                self.target.update()
                 self._update_bullets()
                 # tiy 283 disabled
                 #self._update_aliens()
                 ## tiy 266
                 #self._delete_rain()
                 #self._continue_rain()
-
-            #self._target.update()
 
             self._update_screen()
             self.clock.tick(60)
@@ -113,14 +111,18 @@ class AlienInvasion:
 
             # Get rid of any remaining bullets and aliens.
             self.bullets.empty()
-            self.aliens.empty()
+            #self.aliens.empty()
+            # tiy 283
             self.target.empty()
+            self.target.add(self.target_practice)
+            for target in self.target.sprites():
+                target.draw_button()
+                target.center_target()
 
             # Create a new fleet and center the ship.
             # tiy 283 disabled
             #self._create_fleet()
             self.ship.center_ship()
-            self.target_practice.center_target()
 
             # Hide the mouse cursor.
             pygame.mouse.set_visible(False)
@@ -182,6 +184,7 @@ class AlienInvasion:
                 self.bullets.remove(bullet)
                 print(self.stats.bullets_left)
                 if self.stats.bullets_left == 0:
+                    print("out of bullets!")
                     self._ship_hit()
         # Shows bullets being deleted as they move off screen.
         # Keep uncommented to save memory, page 251.
@@ -196,7 +199,11 @@ class AlienInvasion:
         # tiy 283
         # find out why target doesn't delete with True, True
         collisions = pygame.sprite.groupcollide(
-                self.bullets, self.target, True, False)
+                self.bullets, self.target, True, True)
+        if not self.target:
+        #if len(self.target) == 0:
+            print("target destroyed!")
+            self._ship_hit()
         #print(collisions)
 
         ## tiy 283 disabled
@@ -210,9 +217,8 @@ class AlienInvasion:
         #    self._create_fleet()
 
     # tiy 283
-    def _update_target(self):
-        self.target_practice.update()
-        self.target.add(self.target_practice)
+    #def _update_target(self):
+    #    self.target_practice.update()
 
     def _update_aliens(self):
         """Check if the fleet is at an edge, then update positions."""
@@ -232,25 +238,28 @@ class AlienInvasion:
         """Respond to the ship being hit by an alien."""
         #if self.stats.ships_left > 0:
         # tiy 283
-        if self.stats.bullets_left > 0:
-            # Decrement ships left.
-            #self.stats.bullets_left -= 1
-            #self.stats.ships_left -= 1
+        self.game_active = False
+        pygame.mouse.set_visible(True)
+        #if len(self.target) == 0:
+        #    print("target is empty")
+        #    # Decrement ships left.
+        #    #self.stats.bullets_left -= 1
+        #    #self.stats.ships_left -= 1
 
-            # Get rid of any remaining bullets and aliens.
-            self.bullets.empty()
-            self.aliens.empty()
+        #    # Get rid of any remaining bullets and aliens.
+        #    self.bullets.empty()
+        #    #self.aliens.empty()
 
-            # Create a new fleet and center the ship.
-            self._create_fleet()
-            self.ship.center_ship()
-            #print(self.stats.ships_left)
+        #    # Create a new fleet and center the ship.
+        #    #self._create_fleet()
+        #    self.ship.center_ship()
+        #    #print(self.stats.ships_left)
 
-            # Pause
-            sleep(0.5)
-        else:
-            self.game_active = False
-            pygame.mouse.set_visible(True)
+        #    # Pause
+        #    sleep(0.5)
+        #else:
+        #    self.game_active = False
+        #    pygame.mouse.set_visible(True)
 
     def _check_aliens_bottom(self):
         """Check if any aliens have reached the bottom of the screen."""
@@ -454,7 +463,10 @@ class AlienInvasion:
             self.play_button.draw_button()
 
         # tiy 283
-        self.target_practice.draw_button()
+        #self.target_practice.draw_button()
+        #for target in self.target.copy():
+        for target in self.target.sprites():
+            target.draw_button()
 
         pygame.display.flip()
 

@@ -38,6 +38,7 @@ class Rectangle(Sprite):
         self.y = float(self.rect.y)
 
     def draw_button(self):
+    #def draw_button(self):
         """Draw blank button and then draw message."""
         self.screen.fill(self.button_color, self.rect)
 
