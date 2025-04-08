@@ -32,3 +32,16 @@ class Button:
         """Draw blank button and then draw message."""
         self.screen.fill(self.button_color, self.rect)
         self.screen.blit(self.msg_image, self.msg_image_rect)
+
+# tiy 286, reused most of the parent class above
+class Button1(Button):
+    def __init__(self, ai_game, msg):
+        super().__init__(ai_game, msg)
+        self.rect.topleft = self.screen_rect.topleft
+        self._prep_msg(msg)
+
+class Button2(Button):
+    def __init__(self, ai_game, msg):
+        super().__init__(ai_game, msg)
+        self.rect.topright = self.screen_rect.topright
+        self._prep_msg(msg)

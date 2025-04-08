@@ -6,7 +6,7 @@ import pygame
 
 from settings import Settings
 from game_stats import GameStats
-from button import Button
+from button import Button, Button1, Button2
 from rectangle import Rectangle
 from ship import Ship
 from bullet import Bullet
@@ -58,6 +58,10 @@ class AlienInvasion:
         # Make the Play button.
         self.play_button = Button(self, "Play")
 
+        # tiy 186
+        self.fast_button = Button1(self, "faster")
+        self.reset_button = Button2(self, "reset")
+
         # tiy 283
         # Make the rectangle for target practice.
         self.target_practice = Rectangle(self)
@@ -94,13 +98,29 @@ class AlienInvasion:
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 mouse_pos = pygame.mouse.get_pos()
                 self._check_play_button(mouse_pos)
+                self._check_faster_slower(mouse_pos)
 
     def _check_play_button(self, mouse_pos):
         """Start a new game when the player clicks Play."""
         button_clicked = self.play_button.rect.collidepoint(mouse_pos)
         # tiy 283
         if button_clicked:
+            # tiy 286 disabled
+            #self.settings.initialize_dynamic_settings()
             self._start_game()
+
+    # tiy 286
+    def _check_faster_slower(self, mouse_pos):
+        faster = self.fast_button.rect.collidepoint(mouse_pos)
+        reset = self.reset_button.rect.collidepoint(mouse_pos)
+        if faster:
+            print("going faster")
+            self.settings.increase_speed()
+            print(self.settings.bullet_speed)
+        if reset:
+            print("resetting speed")
+            self.settings.initialize_dynamic_settings()
+            print(self.settings.bullet_speed)
 
     # tiy 283
     def _start_game(self):
@@ -147,6 +167,8 @@ class AlienInvasion:
             self._fire_bullet()
         # tiy 283
         elif event.key == pygame.K_p:
+            # tiy 286 disabled
+            #self.settings.initialize_dynamic_settings()
             self._start_game()
 
     def _check_keyup_events(self, event):
@@ -202,8 +224,22 @@ class AlienInvasion:
                 self.bullets, self.target, True, True)
         if not self.target:
         #if len(self.target) == 0:
-            print("target destroyed!")
-            self._ship_hit()
+            print("TARGET DESTROYED!")
+            self.bullets.empty()
+            self.stats.reset_stats()
+            print(f"bullets reset: {self.stats.bullets_left}")
+            print("spawning new target")
+            sleep(0.5)
+            self.settings.increase_speed()
+            print(self.settings.bullet_speed)
+            self.target.add(self.target_practice)
+            for target in self.target.sprites():
+                target.center_target()
+            # same as above, just different way of writing it
+            # see help for pygame.sprite.Group.sprites
+            #for sprite in self.target:
+            #    sprite.center_target()
+            #self._ship_hit()
         #print(collisions)
 
         ## tiy 283 disabled
@@ -461,6 +497,11 @@ class AlienInvasion:
         # Draw the play button if the game is inactive.
         if not self.game_active:
             self.play_button.draw_button()
+
+        # tiy 286
+        if not self.game_active:
+            self.fast_button.draw_button()
+            self.reset_button.draw_button()
 
         # tiy 283
         #self.target_practice.draw_button()

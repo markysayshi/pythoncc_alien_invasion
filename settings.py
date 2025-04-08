@@ -11,13 +11,11 @@ class Settings:
         #self.bg_color = (0, 0, 0)
 
         # Ship settings
-        self.ship_speed = 1.5
         self.ship_limit = 3
         # tiy 283
         self.bullet_limit = 3
 
         #Bullet settings
-        self.bullet_speed = 2.5
         #self.bullet_width = 3
         ## increased bullet size, for testing
         ##self.bullet_width = 300
@@ -33,13 +31,27 @@ class Settings:
         self.bullets_allowed = 3
 
         # Alien settings
-        self.alien_speed = 1.0
         #self.fleet_drop_speed = 10
         #  tiy 283
         self.fleet_drop_speed = 0
 
+        ## tiy 266
+        #self.rain_speed = 1.0
+
+        # How quickly the game speeds up
+        self.speedup_scale = 1.1
+
+        self.initialize_dynamic_settings()
+
+    def initialize_dynamic_settings(self):
+        self.ship_speed = 1.5
+        self.bullet_speed = 2.5
+        self.alien_speed = 1.0
+
         # fleet_direction of 1 represents right; -1 represents left.
         self.fleet_direction = 1
 
-        ## tiy 266
-        #self.rain_speed = 1.0
+    def increase_speed(self):
+        self.ship_speed *= self.speedup_scale
+        self.bullet_speed *= self.speedup_scale
+        self.alien_speed *= self.speedup_scale
