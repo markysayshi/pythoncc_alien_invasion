@@ -1,6 +1,7 @@
 # alien invasion start, page 229
 import sys
 from time import sleep
+from pathlib import Path
 
 import pygame
 
@@ -65,6 +66,7 @@ class AlienInvasion:
         """Respond to keypresses and mouse events."""
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                self._write_high_score()
                 sys.exit()
             elif event.type == pygame.KEYDOWN:
                 self._check_keydown_events(event)
@@ -105,6 +107,7 @@ class AlienInvasion:
         elif event.key == pygame.K_LEFT:
             self.ship.moving_left = True
         elif event.key == pygame.K_q:
+            self._write_high_score()
             sys.exit()
         elif event.key == pygame.K_SPACE:
             self._fire_bullet()
@@ -271,6 +274,12 @@ class AlienInvasion:
             self.play_button.draw_button()
 
         pygame.display.flip()
+
+    # tiy 299, 14-5
+    def _write_high_score(self):
+        """Write the high score to a file."""
+        path = Path('high_score.txt')
+        path.write_text(str(self.stats.high_score))
 
 if __name__ == '__main__':
     # Make a game instance, and run the game.
